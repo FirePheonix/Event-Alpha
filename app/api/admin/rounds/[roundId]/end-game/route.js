@@ -8,7 +8,7 @@ import User from 'models/user';
 
 // Check if user is admin
 const isAdmin = (email) => {
-  return email === 'shubhsoch@gmail.com' || email === 'Rohan@dualite.dev';
+  return email === 'shubhsoch@gmail.com' || email === 'rohan@dualite.dev';
 };
 
 export async function POST(request, { params }) {

@@ -11,7 +11,7 @@ const Home = () => {
   const [leaderboardLoading, setLeaderboardLoading] = useState(true);
 
   // Check if user is admin
-  const isAdmin = session?.user?.email === 'shubhsoch@gmail.com' || session?.user?.email === 'Rohan@dualite.dev';
+  const isAdmin = session?.user?.email === 'shubhsoch@gmail.com' || session?.user?.email === 'rohan@dualite.dev';
 
   // Helper functions for status display
   const getStatusColor = (status) => {
