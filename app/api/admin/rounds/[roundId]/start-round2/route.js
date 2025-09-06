@@ -5,7 +5,7 @@ import Round from 'models/round';
 
 // Check if user is admin
 const isAdmin = (email) => {
-  return email === 'shubhsoch@gmail.com';
+  return email === 'shubhsoch@gmail.com' || email === 'Rohan@dualite.dev';
 };
 
 export async function POST(request, { params }) {
