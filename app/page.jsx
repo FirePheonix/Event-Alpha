@@ -221,7 +221,7 @@ const Home = () => {
                   <h3 className="awesome-serif-italic text-sm sm:text-base font-bold" style={{ color: '#ffffff' }}>Win Points</h3>
                 </div>
                 <p className="text-sm leading-relaxed" style={{ color: '#e5e5e5' }}>
-                  Earn 100 points for perfect matches, 30 points for correct tool guesses. Climb the leaderboard and become the ultimate BuildWars champion!
+                  Earn 30 points for correct tool guesses with the output, and 100 more if your output is also the most popular choice. Climb the leaderboard and become the ultimate BuildWars champion!
                 </p>
               </div>
             </div>
