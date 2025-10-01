@@ -240,7 +240,7 @@ const Home = () => {
           {rounds.length === 0 && (
             <div className="text-center py-8 sm:py-12">
               <div className="bg-gray-800/50 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-gray-700">
-                <h3 className="awesome-serif-italic text-lg sm:text-xl lg:text-2xl mb-2" style={{ color: '#ffffff' }}># No Active Game</h3>
+                <h3 className="awesome-serif-italic text-lg sm:text-xl lg:text-2xl mb-2" style={{ color: '#ffffff' }}>Game Not Started</h3>
                 <p className="mb-4 text-sm sm:text-base" style={{ color: '#888888' }}>Wait for a session to start</p>
                 <button className="bg-gray-700 text-gray-400 px-4 sm:px-6 py-2 rounded-lg cursor-not-allowed text-sm sm:text-base">
                   Join Game

@@ -24,22 +24,24 @@ export async function GET(request) {
     .sort({ createdAt: -1 })
     .limit(10); // Get last 10 games
 
-    const gameHistory = userGuesses.map(guess => {
-      const round = guess.round;
-      const completionDate = guess.round2CompletedAt || guess.round1CompletedAt || guess.createdAt;
-      
-      return {
-        gameId: round._id,
-        gameTitle: round.title || `Game Session`,
-        gameStatus: round.status,
-        userRound1Choice: guess.round1Choice,
-        userRound2Choice: guess.round2Choice,
-        pointsEarned: guess.pointsEarned || 0,
-        completedAt: completionDate,
-        isFullyCompleted: guess.round1Choice && guess.round2Choice,
-        createdAt: guess.createdAt
-      };
-    });
+    const gameHistory = userGuesses
+      .filter(guess => guess.round && guess.round._id) // Filter out guesses with null/invalid rounds
+      .map(guess => {
+        const round = guess.round;
+        const completionDate = guess.round2CompletedAt || guess.round1CompletedAt || guess.createdAt;
+        
+        return {
+          gameId: round._id,
+          gameTitle: round.title || `Game Session`,
+          gameStatus: round.status,
+          userRound1Choice: guess.round1Choice,
+          userRound2Choice: guess.round2Choice,
+          pointsEarned: guess.pointsEarned || 0,
+          completedAt: completionDate,
+          isFullyCompleted: guess.round1Choice && guess.round2Choice,
+          createdAt: guess.createdAt
+        };
+      });
 
     return Response.json({
       success: true,
