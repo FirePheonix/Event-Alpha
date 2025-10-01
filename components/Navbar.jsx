@@ -144,19 +144,50 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <div className='sm:hidden flex relative'>
+        <div className='sm:hidden flex items-center gap-3 relative'>
             {session?.user ? (
-                <div className='flex'>
+                <div className='flex items-center gap-3'>
+                    {/* User Points - Mobile */}
+                    <div className="flex items-center gap-1 px-2 py-1 rounded-lg">
+                        <span className="text-white text-sm font-bold">{userStats?.totalPoints || 0} Pts</span>
+                        <span className="text-yellow-300 text-sm">🏆</span>
+                    </div>
+                    
+                    {/* Leaderboard Button - Mobile */}
+                    <Link 
+                        href="/leaderboard" 
+                        className="text-center text-white font-semibold transition-all duration-500 rounded-full shadow-lg hover:shadow-xl text-sm"
+                        style={{
+                            backgroundImage: 'linear-gradient(to right, #E55D87 0%, #5FC3E4 51%, #E55D87 100%)',
+                            backgroundSize: '200% auto',
+                            padding: '6px 16px',
+                        }}
+                        onMouseEnter={(e) => e.target.style.backgroundPosition = 'right center'}
+                        onMouseLeave={(e) => e.target.style.backgroundPosition = 'left center'}
+                    >
+                        Leaderboard
+                    </Link>
+                    
                     <Image 
                         src={session?.user.image}
                         alt="profile"
                         height={37}
                         width={37}
-                        className="rounded-full"
+                        className="rounded-full border-2 border-gray-600 cursor-pointer"
                         onClick={() => setToggleDropdown((prev) => !prev)}
                     />
                     {toggleDropdown && (
-                        <div className='absolute right-0 top-full mt-3 p-3 rounded-lg border min-w-[120px] flex flex-col gap-2 shadow-lg' style={{ backgroundColor: '#000000', borderColor: '#ffffff' }}>
+                        <div className='absolute right-0 top-full mt-3 p-3 rounded-lg border min-w-[140px] flex flex-col gap-2 shadow-lg' style={{ backgroundColor: '#000000', borderColor: '#ffffff' }}>
+                            {/* Admin Dashboard Button - Mobile */}
+                            {session?.user?.email === 'shubhsoch@gmail.com' && (
+                                <Link 
+                                    href="/admin/dashboard" 
+                                    className="w-full bg-red-700 hover:bg-red-600 text-white py-1.5 px-4 rounded-lg text-sm font-semibold transition text-center"
+                                    onClick={() => setToggleDropdown(false)}
+                                >
+                                    Admin Dashboard
+                                </Link>
+                            )}
                             <button
                                 type="button"
                                 onClick={() => {

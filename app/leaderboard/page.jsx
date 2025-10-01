@@ -75,7 +75,7 @@ export default function Leaderboard() {
       {/* Main Content */}
       <div className="relative z-10 flex flex-col justify-center items-center min-h-screen w-full p-8">
         {/* Main Container */}
-        <div className="bg-gray-900/90 backdrop-blur-sm rounded-3xl p-8 border border-gray-600 max-w-4xl w-full">
+        <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 max-w-4xl w-full">
           {/* Title */}
           <h1 className="text-4xl font-bold text-white text-center mb-8 italic" style={{ fontFamily: 'serif' }}>
             Final Rankings
@@ -86,9 +86,12 @@ export default function Leaderboard() {
             {/* Your Rank */}
             <div className="w-full max-w-md">
               <h3 className="text-lg text-white mb-3">Your Rank</h3>
-              <div className="bg-gray-800/80 border border-gray-600 rounded-xl p-4">
+              <div className="bg-white/10 border border-white/20 rounded-xl p-4 backdrop-blur-sm">
                 <div className="text-yellow-400 font-bold text-lg">
-                  #{userStats?.rank || 1} out of {globalLeaderboard.length} Players
+                  {globalLeaderboard.length === 0 ? 
+                    "No games played yet" : 
+                    `#${userStats?.rank || 'Unranked'} out of ${globalLeaderboard.length} Players`
+                  }
                 </div>
               </div>
             </div>
@@ -97,85 +100,49 @@ export default function Leaderboard() {
           {/* Leaderboard */}
           <div className="space-y-3">
             {globalLeaderboard.length === 0 ? (
-              // Mock data for demonstration
-              [
-                { userEmail: 'cyberwarrior26@example.com', totalPoints: 100, rank: 1 },
-                { userEmail: 'player2@example.com', totalPoints: 100, rank: 2 },
-                { userEmail: 'player3@example.com', totalPoints: 90, rank: 3 },
-                { userEmail: 'player4@example.com', totalPoints: 60, rank: 4 },
-                { userEmail: 'player5@example.com', totalPoints: 30, rank: 5 }
-              ].map((player, index) => (
-                <div 
-                  key={player.userEmail}
-                  className="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-4 border border-gray-600 flex justify-between items-center"
-                >
-                  <div className="flex items-center gap-4">
-                    {/* Rank Badge */}
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
-                      index === 0 ? 'bg-green-500 text-black' : 
-                      index === 1 ? 'bg-yellow-500 text-black' : 
-                      index === 2 ? 'bg-gray-300 text-black' : 'bg-gray-600 text-white'
-                    }`}>
-                      {index + 1}
-                    </div>
-
-                    {/* Avatar and Name */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold">
-                        S
-                      </div>
-                      <div>
-                        <div className="text-white font-medium text-lg">
-                          {player.userEmail === session?.user?.email ? 'You' : 'Cyberwarrior26'}
-                        </div>
-                        <div className="text-gray-400 text-sm">1250 Points</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Points */}
-                  <div className={`font-bold text-lg ${
-                    index === 0 ? 'text-green-400' :
-                    index === 1 ? 'text-green-400' :
-                    index === 2 ? 'text-green-400' :
-                    index === 3 ? 'text-green-400' : 'text-green-400'
-                  }`}>
-                    +{player.totalPoints}
-                  </div>
-                </div>
-              ))
+              // Show message when no games are played
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 text-center">
+                <div className="text-gray-300 text-lg mb-4">🏆</div>
+                <div className="text-white text-xl mb-2">No Games Played Yet</div>
+                <div className="text-gray-300 mb-4">Complete some games to see the leaderboard!</div>
+                <div className="text-gray-400 text-sm">Your current score: 0 points</div>
+              </div>
             ) : (
               globalLeaderboard.map((player, index) => (
                 <div 
                   key={player.userEmail}
-                  className="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-4 border border-gray-600 flex justify-between items-center"
+                  className={`bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20 flex justify-between items-center ${
+                    player.userEmail === session?.user?.email ? 'border-yellow-500/50 bg-yellow-500/5' : ''
+                  }`}
                 >
                   <div className="flex items-center gap-4">
                     {/* Rank Badge */}
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
-                      index === 0 ? 'bg-green-500 text-black' : 
-                      index === 1 ? 'bg-yellow-500 text-black' : 
-                      index === 2 ? 'bg-gray-300 text-black' : 'bg-gray-600 text-white'
+                      index === 0 ? 'bg-yellow-500 text-black' : 
+                      index === 1 ? 'bg-gray-400 text-black' : 
+                      index === 2 ? 'bg-orange-500 text-black' : 'bg-gray-600 text-white'
                     }`}>
                       {index + 1}
                     </div>
 
                     {/* Avatar and Name */}
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold">
-                        {(player.userEmail.charAt(0) || 'S').toUpperCase()}
+                      <div className="w-8 h-8 bg-blue-600/80 rounded-full flex items-center justify-center text-white font-bold backdrop-blur-sm border border-white/20">
+                        {(player.userEmail.charAt(0) || 'U').toUpperCase()}
                       </div>
                       <div>
                         <div className="text-white font-medium text-lg">
                           {player.userEmail === session?.user?.email ? 'You' : player.userEmail.split('@')[0]}
                         </div>
-                        <div className="text-gray-400 text-sm">{player.totalPoints} Points</div>
+                        <div className="text-gray-300 text-sm">
+                          {player.totalPoints} Points • {player.gamesPlayed} Games
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Points */}
-                  <div className="text-green-400 font-bold text-lg">
+                  <div className="text-yellow-400 font-bold text-lg">
                     +{player.totalPoints}
                   </div>
                 </div>

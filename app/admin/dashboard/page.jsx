@@ -22,7 +22,7 @@ export default function AdminDashboard() {
   // Check if user is admin
   const isAdmin =
     session?.user?.email === 'shubhsoch@gmail.com' ||
-    session?.user?.email === 'Rohan@dualite.dev';
+    session?.user?.email === 'rohan@dualite.dev';
 
   useEffect(() => {
     if (status === 'loading') return;

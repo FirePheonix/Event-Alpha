@@ -13,9 +13,11 @@ export default function GamePage(props) {
   const [userGuess, setUserGuess] = useState(null);
   const [lobbyPlayers, setLobbyPlayers] = useState({ count: 0, emails: [] });
   const [timeLeft, setTimeLeft] = useState(30); // Start with 30 seconds for Round 1
+  const [round2TimeLeft, setRound2TimeLeft] = useState(60); // 60 seconds for Round 2
   const [currentRound, setCurrentRound] = useState(1);
   const [loading, setLoading] = useState(true);
   const [round1Started, setRound1Started] = useState(false);
+  const [round2Started, setRound2Started] = useState(false);
   const [round1Choice, setRound1Choice] = useState(null); // Track current round 1 choice
   const [round2Choice, setRound2Choice] = useState(null); // Track current round 2 choice
 
@@ -34,6 +36,22 @@ export default function GamePage(props) {
       return () => clearTimeout(timer);
     }
   }, [timeLeft, round1Started, currentRound]);
+
+  // Timer for Round 2 (auto-starts when entering Round 2)
+  useEffect(() => {
+    if (currentRound === 2 && round2TimeLeft > 0) {
+      const timer = setTimeout(() => setRound2TimeLeft(round2TimeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [round2TimeLeft, currentRound]);
+
+  // Auto-start Round 2 timer when entering Round 2
+  useEffect(() => {
+    if (currentRound === 2 && !round2Started) {
+      setRound2Started(true);
+      setRound2TimeLeft(60); // Reset to 60 seconds
+    }
+  }, [currentRound, round2Started]);
 
   const fetchGame = async () => {
     try {
@@ -424,14 +442,18 @@ export default function GamePage(props) {
                     fill="transparent"
                     strokeLinecap="round"
                     strokeDasharray={`${2 * Math.PI * 50}`}
-                    strokeDashoffset={`${2 * Math.PI * 50 * (1 - 50/60)}`} // 50 seconds out of 60
+                    strokeDashoffset={`${2 * Math.PI * 50 * (1 - round2TimeLeft / 60)}`}
                     className="transition-all duration-1000"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-3xl font-bold text-white">50</span>
+                  <span className="text-3xl font-bold text-white">{round2TimeLeft}</span>
                 </div>
               </div>
+              <div className="text-white text-lg mb-2">
+                Time Left: <span className="font-bold text-red-400">{round2TimeLeft}s</span>
+              </div>
+              <div className="text-gray-300">You have 60 seconds to analyze and choose!</div>
             </div>
 
             {/* Question */}
@@ -455,9 +477,12 @@ export default function GamePage(props) {
                 <button
                   key={option}
                   onClick={() => selectRound2Choice(`Link${option}`)}
+                  disabled={round2TimeLeft === 0}
                   className={`relative rounded-xl border-2 transition-all transform hover:scale-105 backdrop-blur-sm ${
                     round2Choice === `Link${option}` || userGuess?.round2Choice === `Link${option}`
                       ? 'border-green-400 bg-green-500/20' 
+                      : round2TimeLeft === 0
+                      ? 'border-white/10 bg-white/5 cursor-not-allowed opacity-50'
                       : 'border-white/20 bg-white/5 hover:border-white/40'
                   }`}
                 >
@@ -490,9 +515,9 @@ export default function GamePage(props) {
             <div className="text-center">
               <button
                 onClick={submitRound2Choice}
-                disabled={!round2Choice && !userGuess?.round2Choice}
+                disabled={(!round2Choice && !userGuess?.round2Choice) || round2TimeLeft === 0}
                 className={`px-12 py-3 rounded-xl font-semibold transition-colors text-lg ${
-                  round2Choice || userGuess?.round2Choice
+                  (round2Choice || userGuess?.round2Choice) && round2TimeLeft > 0
                     ? 'bg-blue-600 hover:bg-blue-700 text-white'
                     : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                 }`}
@@ -500,6 +525,13 @@ export default function GamePage(props) {
                 Submit
               </button>
             </div>
+
+            {/* Timer ended message */}
+            {round2TimeLeft === 0 && !round2Choice && !userGuess?.round2Choice && (
+              <div className="text-center mt-4">
+                <div className="text-red-400 font-bold text-lg">⏰ Time's up! Please select an option and submit.</div>
+              </div>
+            )}
 
             {/* Current Selection Indicator */}
             {(round2Choice || userGuess?.round2Choice) && (

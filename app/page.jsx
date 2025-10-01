@@ -15,7 +15,7 @@ const Home = () => {
   const [historyLoading, setHistoryLoading] = useState(true);
   const [roundPlayerCounts, setRoundPlayerCounts] = useState({});
 
-  const isAdmin = session?.user?.email === 'shubhsoch@gmail.com' || session?.user?.email === 'Rohan@dualite.dev';
+  const isAdmin = session?.user?.email === 'shubhsoch@gmail.com' || session?.user?.email === 'rohan@dualite.dev';
 
   const getStatusColor = (status) => {
     switch(status) {
@@ -255,7 +255,7 @@ const Home = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                     <h3 className="awesome-serif-italic text-lg sm:text-xl" style={{ color: '#ffffff' }}>
-                      # {round.status === 'waiting' ? 'No Active Game' : `Session ${index + 1}`}
+                      # {round.status === 'waiting' ? 'Game Not Started' : `Session ${index + 1}`}
                     </h3>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                       <span className="text-xs sm:text-sm" style={{ color: '#888888' }}>👥 {roundPlayerCounts[round._id] || 0} Players Joined Round 1</span>
