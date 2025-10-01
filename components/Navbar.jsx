@@ -8,6 +8,8 @@ import { signIn, signOut, useSession, getProviders} from 'next-auth/react'
 
 const Navbar = () => {
     const {data: session} = useSession();
+    const [userStats, setUserStats] = useState(null);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const [providers, setProviders] = useState(null);
     const [toggleDropdown, setToggleDropdown] = useState(false);
@@ -25,34 +27,102 @@ const Navbar = () => {
         }
 
         setupProviders();
-    }, []);
+        
+        // Fetch user stats if logged in
+        if (session) {
+            fetch('/api/leaderboard')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        setUserStats(data.userStats);
+                    }
+                })
+                .catch(err => console.error('Error fetching user stats:', err));
+        }
+
+        // Add scroll listener
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [session]);
 
   return (
-    <nav className='flex justify-between items-center w-full mb-16 pt-3'>
+    <nav 
+      className={`fixed top-0 left-0 right-0 flex justify-between items-center w-full py-3 px-6 sm:px-16 z-50 transition-all duration-300 ${
+        isScrolled ? 'backdrop-blur-lg bg-black/20' : 'bg-transparent'
+      }`}
+    >
         <Link href="/" className='flex gap-2 items-center'>
-            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                <span className="text-black font-bold text-lg">V</span>
-            </div>
-            <p className='max-sm:hidden font-satoshi font-semibold text-lg text-white tracking-wide'>VibeBet</p>
+            <Image 
+                src="/assets/images/logo-BuildWars.png"
+                alt="BuildWars Logo"
+                width={140}
+                height={45}
+                className="max-sm:w-28"
+            />
         </Link>
+
+
 
         {/*  Desktop Navigation  */}
         <div className='sm:flex hidden'>
             {session?.user ? (
-                <div className='flex gap-3 md:gap-5'>
-                    <button type='button' onClick={signOut} className='rounded-full border border-white bg-transparent py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center'>
-                        Sign Out
-                    </button>
-
-                    <Link href="/profile">
+                <div className='flex items-center gap-4'>
+                    {/* User Points */}
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-lg">
+                        <span className="text-white text-base font-bold">{userStats?.totalPoints || 0} Pts</span>
+                        <span className="text-yellow-300 text-base">🏆</span>
+                    </div>
+                    
+                    <Link 
+                        href="/leaderboard" 
+                        className="text-center text-white font-semibold transition-all duration-500 rounded-full shadow-lg hover:shadow-xl"
+                        style={{
+                            backgroundImage: 'linear-gradient(to right, #E55D87 0%, #5FC3E4 51%, #E55D87 100%)',
+                            backgroundSize: '200% auto',
+                            padding: '10px 30px',
+                        }}
+                        onMouseEnter={(e) => e.target.style.backgroundPosition = 'right center'}
+                        onMouseLeave={(e) => e.target.style.backgroundPosition = 'left center'}
+                    >
+                        Leaderboard
+                    </Link>
+                    
+                    {/* Admin Dashboard Button */}
+                    {session?.user?.email === 'shubhsoch@gmail.com' && (
+                        <Link href="/admin/dashboard" className="bg-red-700 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-semibold transition">
+                            Admin Dashboard
+                        </Link>
+                    )}
+                    
+                    <div className="relative">
                         <Image 
                             src={session?.user.image}
                             alt="profile"
-                            height={37}
-                            width={37}
-                            className="rounded-full"
+                            height={40}
+                            width={40}
+                            className="rounded-full border-2 border-gray-600 cursor-pointer"
+                            onClick={() => setToggleDropdown((prev) => !prev)}
                         />
-                    </Link>
+                        {toggleDropdown && (
+                            <div className="absolute right-0 top-full mt-3 p-3 rounded-lg border min-w-[120px] flex flex-col gap-2 shadow-lg" style={{ backgroundColor: '#000000', borderColor: '#ffffff' }}>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setToggleDropdown(false);
+                                        signOut();
+                                    }}
+                                    className="w-full rounded-full border py-1.5 px-4 transition-all text-center text-sm font-inter flex items-center justify-center"
+                                    style={{ borderColor: '#ffffff', backgroundColor: '#ffffff', color: '#000000' }}
+                                >
+                                    Sign Out
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             ): (
                 <>
@@ -62,7 +132,8 @@ const Navbar = () => {
                                 type="button"
                                 key={provider.name}
                                 onClick={() => signIn(provider.id)}
-                                className='rounded-full border border-white bg-white py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center'
+                                className="rounded-full border py-1.5 px-5 transition-all text-center text-sm font-inter flex items-center justify-center"
+                                style={{ borderColor: '#ffffff', backgroundColor: '#ffffff', color: '#000000' }}
                             >
                                 Sign In
                             </button>
@@ -77,29 +148,23 @@ const Navbar = () => {
             {session?.user ? (
                 <div className='flex'>
                     <Image 
-                            src={session?.user.image}
-                            alt="profile"
-                            height={37}
-                            width={37}
-                            className="rounded-full"
-                            onClick={() => setToggleDropdown((prev) => !prev)}
+                        src={session?.user.image}
+                        alt="profile"
+                        height={37}
+                        width={37}
+                        className="rounded-full"
+                        onClick={() => setToggleDropdown((prev) => !prev)}
                     />
                     {toggleDropdown && (
-                        <div className='absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-gray-900 border border-gray-700 min-w-[210px] flex flex-col gap-2 justify-end items-end shadow-lg'>
-                            <Link 
-                                className='text-sm font-inter text-gray-300 hover:text-white font-medium'
-                                href="/profile"
-                                onClick={() => setToggleDropdown(false)}
-                            >
-                                My Profile
-                            </Link>
+                        <div className='absolute right-0 top-full mt-3 p-3 rounded-lg border min-w-[120px] flex flex-col gap-2 shadow-lg' style={{ backgroundColor: '#000000', borderColor: '#ffffff' }}>
                             <button
                                 type="button"
                                 onClick={() => {
                                     setToggleDropdown(false);
                                     signOut();
                                 }}
-                                className='mt-5 w-full rounded-full border border-white bg-white py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center'
+                                className="w-full rounded-full border py-1.5 px-4 transition-all text-center text-sm font-inter flex items-center justify-center"
+                                style={{ borderColor: '#ffffff', backgroundColor: '#ffffff', color: '#000000' }}
                             >
                                 Sign Out
                             </button>
@@ -114,7 +179,8 @@ const Navbar = () => {
                                 type="button"
                                 key={provider.name}
                                 onClick={() => signIn(provider.id)}
-                                className='rounded-full border border-white bg-white py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center'
+                                className="rounded-full border py-1.5 px-5 transition-all text-center text-sm font-inter flex items-center justify-center"
+                                style={{ borderColor: '#ffffff', backgroundColor: '#ffffff', color: '#000000' }}
                             >
                                 Sign In
                             </button>

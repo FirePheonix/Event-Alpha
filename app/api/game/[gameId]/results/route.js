@@ -12,7 +12,17 @@ export async function GET(request, { params }) {
     // Get the round
     const round = await Round.findById(gameId);
     if (!round) {
-      return new Response('Round not found', { status: 404 });
+      return new Response(JSON.stringify({ message: 'Round not found' }), { status: 404 });
+    }
+
+    // Check if game has ended - results should only be accessible after admin ends the game
+    if (round.status !== 'ended') {
+      return new Response(JSON.stringify({ 
+        message: 'Results not available yet. Please wait for the admin to end the game.' 
+      }), { 
+        status: 403,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     console.log(`Fetching results for round ${gameId}, status: ${round.status}`);

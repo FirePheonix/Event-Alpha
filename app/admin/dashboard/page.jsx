@@ -20,16 +20,18 @@ export default function AdminDashboard() {
   });
 
   // Check if user is admin
-  const isAdmin = session?.user?.email === 'shubhsoch@gmail.com' || session?.user?.email === 'rohan@dualite.dev';
+  const isAdmin =
+    session?.user?.email === 'shubhsoch@gmail.com' ||
+    session?.user?.email === 'Rohan@dualite.dev';
 
   useEffect(() => {
     if (status === 'loading') return;
-    
+
     if (!session) {
       router.push('/');
       return;
     }
-    
+
     if (!isAdmin) {
       router.push('/');
       return;
@@ -40,12 +42,12 @@ export default function AdminDashboard() {
 
   const fetchRounds = () => {
     fetch('/api/admin/rounds')
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setRounds(data.rounds || []);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error fetching rounds:', err);
         setLoading(false);
       });
@@ -59,10 +61,30 @@ export default function AdminDashboard() {
         body: JSON.stringify({
           title: 'Test Game - AI Tools Battle',
           linkMappings: [
-            { linkId: 'LinkA', tool: 'Dualite', url: 'https://example.com/dualite', description: 'Modern AI assistant' },
-            { linkId: 'LinkB', tool: 'Lovable', url: 'https://example.com/lovable', description: 'Full-stack builder' },
-            { linkId: 'LinkC', tool: 'Bolt', url: 'https://example.com/bolt', description: 'Quick prototyping tool' },
-            { linkId: 'LinkD', tool: 'V0', url: 'https://example.com/v0', description: 'Vercel AI builder' }
+            {
+              linkId: 'LinkA',
+              tool: 'Dualite',
+              url: 'https://example.com/dualite',
+              description: 'Modern AI assistant'
+            },
+            {
+              linkId: 'LinkB',
+              tool: 'Lovable',
+              url: 'https://example.com/lovable',
+              description: 'Full-stack builder'
+            },
+            {
+              linkId: 'LinkC',
+              tool: 'Bolt',
+              url: 'https://example.com/bolt',
+              description: 'Quick prototyping tool'
+            },
+            {
+              linkId: 'LinkD',
+              tool: 'V0',
+              url: 'https://example.com/v0',
+              description: 'Vercel AI builder'
+            }
           ]
         })
       });
@@ -214,10 +236,13 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-black text-white px-4 py-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-5xl font-extrabold mb-8 text-center text-white">
-          🔧 VibeBet Admin Dashboard
+        <h1 className="text-5xl md:text-6xl font-light italic text-white mb-4 tracking-tight text-center">
+          🔧 Build Wars Admin Dashboard
         </h1>
-        
+        <p className="text-xl text-gray-300 font-light text-center mb-8">
+          Manage games and competitions
+        </p>
+
         {/* Quick Actions */}
         <div className="mb-8 text-center">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
@@ -239,31 +264,44 @@ export default function AdminDashboard() {
         {/* Create Round Form */}
         {showCreateForm && (
           <div className="bg-gray-900 border border-gray-700 rounded-xl p-8 mb-8">
-            <h2 className="text-3xl font-bold mb-6 text-white">Create New VibeBet Game</h2>
-            
+            <h2 className="text-3xl font-bold mb-6 text-white">
+              Create New BuildWars Game
+            </h2>
+
             {/* Round Details */}
             <div className="mb-6">
-              <label className="block text-sm font-medium mb-2 text-gray-200">Game Title:</label>
+              <label className="block text-sm font-medium mb-2 text-gray-200">
+                Game Title:
+              </label>
               <input
                 type="text"
                 value={newRound.title}
-                onChange={(e) => setNewRound({...newRound, title: e.target.value})}
+                onChange={(e) =>
+                  setNewRound({ ...newRound, title: e.target.value })
+                }
                 className="w-full p-3 border rounded-lg bg-gray-800 text-white border-gray-600"
                 placeholder="e.g., AI Tools Battle - Frontend Components"
               />
             </div>
 
-            {/* Link Mappings Configuration */}
+            {/* Link Mappings */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               {newRound.linkMappings.map((mapping, index) => (
-                <div key={index} className="bg-gray-800 rounded-lg p-4 border border-gray-600">
+                <div
+                  key={index}
+                  className="bg-gray-800 rounded-lg p-4 border border-gray-600"
+                >
                   <h3 className="font-bold mb-3 text-white">{mapping.linkId}</h3>
-                  
+
                   <div className="mb-3">
-                    <label className="block text-sm font-medium mb-1 text-gray-300">Tool Mapping:</label>
+                    <label className="block text-sm font-medium mb-1 text-gray-300">
+                      Tool Mapping:
+                    </label>
                     <select
                       value={mapping.tool}
-                      onChange={(e) => updateLinkMapping(index, 'tool', e.target.value)}
+                      onChange={(e) =>
+                        updateLinkMapping(index, 'tool', e.target.value)
+                      }
                       className="w-full p-2 border rounded bg-gray-700 text-white border-gray-600"
                     >
                       <option value="Dualite">Dualite</option>
@@ -272,23 +310,31 @@ export default function AdminDashboard() {
                       <option value="V0">V0</option>
                     </select>
                   </div>
-                  
+
                   <div className="mb-3">
-                    <label className="block text-sm font-medium mb-1 text-gray-300">Description:</label>
+                    <label className="block text-sm font-medium mb-1 text-gray-300">
+                      Description:
+                    </label>
                     <textarea
                       value={mapping.description}
-                      onChange={(e) => updateLinkMapping(index, 'description', e.target.value)}
+                      onChange={(e) =>
+                        updateLinkMapping(index, 'description', e.target.value)
+                      }
                       className="w-full p-2 border rounded bg-gray-700 text-white border-gray-600 h-20"
-                      placeholder="Brief description of this option..."
+                      placeholder="Brief description..."
                     />
                   </div>
-                  
+
                   <div className="mb-3">
-                    <label className="block text-sm font-medium mb-1 text-gray-300">Demo URL:</label>
+                    <label className="block text-sm font-medium mb-1 text-gray-300">
+                      Demo URL:
+                    </label>
                     <input
                       type="url"
                       value={mapping.url}
-                      onChange={(e) => updateLinkMapping(index, 'url', e.target.value)}
+                      onChange={(e) =>
+                        updateLinkMapping(index, 'url', e.target.value)
+                      }
                       className="w-full p-2 border rounded bg-gray-700 text-white border-gray-600"
                       placeholder="https://..."
                     />
@@ -308,24 +354,55 @@ export default function AdminDashboard() {
 
         {/* Rounds Management */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-6 text-white">📊 Manage Rounds</h2>
-          
+          <h2 className="text-3xl md:text-4xl font-light italic text-white mb-6 text-center tracking-tight">
+            📊 Manage Rounds
+          </h2>
+
           {rounds.length === 0 ? (
             <div className="bg-gray-900 border border-gray-700 rounded-lg p-8 text-center">
               <div className="text-6xl mb-4">🎲</div>
               <p className="text-xl text-gray-300">No rounds created yet</p>
-              <p className="text-gray-400 mt-2">Create your first VibeBet round above!</p>
+              <p className="text-gray-400 mt-2">
+                Create your first BuildWars round above!
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6">
-              {rounds.map(round => (
-                <div key={round._id} className="bg-gray-900 border border-gray-700 rounded-lg p-6">
+              {rounds.map((round) => (
+                <div
+                  key={round._id}
+                  className="bg-gray-900 border border-gray-700 rounded-lg p-6"
+                >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-xl font-bold text-white">{round.title || `Round #${round._id.slice(-6)}`}</h3>
-                      <p className="text-gray-300">Status: <span className={`font-semibold ${round.status === 'ended' ? 'text-red-400' : round.status === 'active' ? 'text-green-400' : 'text-yellow-400'}`}>{round.status.toUpperCase()}</span></p>
-                      {round.prompt && <p className="text-gray-400 mt-2">{round.prompt}</p>}
-                      {round.winner && <p className="text-gray-300 mt-2">Winner: <span className="font-bold text-white">{round.winner}</span></p>}
+                      <h3 className="text-xl font-bold text-white">
+                        {round.title || `Round #${round._id.slice(-6)}`}
+                      </h3>
+                      <p className="text-gray-300">
+                        Status:{' '}
+                        <span
+                          className={`font-semibold ${
+                            round.status === 'ended'
+                              ? 'text-red-400'
+                              : round.status === 'active'
+                              ? 'text-green-400'
+                              : 'text-yellow-400'
+                          }`}
+                        >
+                          {round.status.toUpperCase()}
+                        </span>
+                      </p>
+                      {round.prompt && (
+                        <p className="text-gray-400 mt-2">{round.prompt}</p>
+                      )}
+                      {round.winner && (
+                        <p className="text-gray-300 mt-2">
+                          Winner:{' '}
+                          <span className="font-bold text-white">
+                            {round.winner}
+                          </span>
+                        </p>
+                      )}
                     </div>
                     <button
                       onClick={() => deleteRound(round._id)}
@@ -334,18 +411,30 @@ export default function AdminDashboard() {
                       🗑️ Delete
                     </button>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                     <button
                       onClick={() => startGame(round._id)}
-                      className={`px-4 py-2 rounded font-semibold ${round.status === 'active' ? 'bg-green-600' : round.status === 'waiting' ? 'bg-gray-600 hover:bg-green-500' : 'bg-gray-700'} text-white transition`}
+                      className={`px-4 py-2 rounded font-semibold ${
+                        round.status === 'active'
+                          ? 'bg-green-600'
+                          : round.status === 'waiting'
+                          ? 'bg-gray-600 hover:bg-green-500'
+                          : 'bg-gray-700'
+                      } text-white transition`}
                       disabled={round.status !== 'waiting'}
                     >
                       🚀 Start Game
                     </button>
                     <button
                       onClick={() => endGame(round._id)}
-                      className={`px-4 py-2 rounded font-semibold ${round.status === 'ended' ? 'bg-red-600' : round.status === 'active' ? 'bg-gray-600 hover:bg-red-500' : 'bg-gray-700'} text-white transition`}
+                      className={`px-4 py-2 rounded font-semibold ${
+                        round.status === 'ended'
+                          ? 'bg-red-600'
+                          : round.status === 'active'
+                          ? 'bg-gray-600 hover:bg-red-500'
+                          : 'bg-gray-700'
+                      } text-white transition`}
                       disabled={round.status !== 'active'}
                     >
                       🏁 End Game
@@ -354,7 +443,7 @@ export default function AdminDashboard() {
                       onClick={() => changeRoundStatus(round._id, 'waiting')}
                       className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded font-semibold transition"
                     >
-                      � Reset
+                      🔄 Reset
                     </button>
                     <a
                       href={`/game/${round._id}`}
@@ -365,23 +454,32 @@ export default function AdminDashboard() {
                     <a
                       href={`/game/${round._id}/results`}
                       className={`px-4 py-2 rounded font-semibold transition text-center ${
-                        round.status === 'ended' 
-                          ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                        round.status === 'ended'
+                          ? 'bg-blue-600 hover:bg-blue-700 text-white'
                           : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                       }`}
                     >
                       📊 Results
                     </a>
                   </div>
-                  
-                  {/* Link Mappings Information */}
+
+                  {/* Link Mappings */}
                   {round.linkMappings && (
                     <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
                       {round.linkMappings.map((mapping, idx) => (
-                        <div key={idx} className="bg-gray-800 rounded p-3 border border-gray-600">
-                          <p className="font-bold text-white">{mapping.linkId}</p>
-                          <p className="text-sm text-gray-300">Tool: {mapping.tool}</p>
-                          <p className="text-xs text-gray-400 mt-1">{mapping.description?.substring(0, 30)}...</p>
+                        <div
+                          key={idx}
+                          className="bg-gray-800 rounded p-3 border border-gray-600"
+                        >
+                          <p className="font-bold text-white">
+                            {mapping.linkId}
+                          </p>
+                          <p className="text-sm text-gray-300">
+                            Tool: {mapping.tool}
+                          </p>
+                          <p className="text-xs text-gray-400 mt-1">
+                            {mapping.description?.substring(0, 30)}...
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -394,8 +492,11 @@ export default function AdminDashboard() {
 
         {/* Back to Home */}
         <div className="text-center">
-          <a href="/" className="px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition">
-            🏠 Back to VibeBet Home
+          <a
+            href="/"
+            className="px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition"
+          >
+            🏠 Back to Build Wars Home
           </a>
         </div>
       </div>
