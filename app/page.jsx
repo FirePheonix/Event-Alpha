@@ -128,8 +128,7 @@ const Home = () => {
           <p className="text-white text-lg mb-4 text-center">The ultimate coding tool battle arena</p>
           
           {/* Main Title */}
-          <h1 className="text-5xl md:text-6xl font-bold italic text-white mb-6 text-center tracking-wide" 
-              style={{ fontFamily: 'serif' }}>
+          <h1 className="text-5xl md:text-6xl awesome-serif-italic-bold text-white mb-6 text-center tracking-wide">
             Welcome to Build Wars
           </h1>
           
@@ -232,8 +231,13 @@ const Home = () => {
 
 
       {/* Active Game Sessions Section */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16" style={{ backgroundColor: '#000000' }}>
-        <div className="max-w-4xl mx-auto">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 relative" style={{ backgroundColor: '#000000' }}>
+        {/* Grid Background */}
+        <div className="absolute inset-0 opacity-30" style={{
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
+          backgroundSize: '30px 30px'
+        }}></div>
+        <div className="max-w-4xl mx-auto relative z-10">
           <h2 className="awesome-serif-italic-bold text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-4 text-center" style={{ color: '#ffffff' }}>Active game sessions</h2>
           <p className="text-center mb-8 sm:mb-12 text-sm sm:text-base" style={{ color: '#888888' }}>Battle your way to the top.</p>
           
@@ -302,8 +306,13 @@ const Home = () => {
       </div>
 
       {/* Game History Section */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-gray-800" style={{ backgroundColor: '#000000' }}>
-        <div className="max-w-4xl mx-auto">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-gray-800 relative" style={{ backgroundColor: '#000000' }}>
+        {/* Grid Background */}
+        <div className="absolute inset-0 opacity-30" style={{
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
+          backgroundSize: '30px 30px'
+        }}></div>
+        <div className="max-w-4xl mx-auto relative z-10">
           <h2 className="awesome-serif-italic-bold text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-4 text-center" style={{ color: '#ffffff' }}>Your Game History</h2>
           <p className="text-center mb-8 sm:mb-12 text-sm sm:text-base" style={{ color: '#888888' }}>Your recent gaming sessions and performance.</p>
           
